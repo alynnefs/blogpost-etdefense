@@ -1,49 +1,33 @@
 var PIXI = require("pixi.js");
+var Inimigo = require("./inimigo");
+var Placar = require("./placar");
 
 var renderer = PIXI.autoDetectRenderer(480, 640);
 document.body.appendChild(renderer.view);
 
 var stage = new PIXI.Container();
 
-var alien;
+var points = new Placar({
+  stage: stage
+});
 
-var points;
+var alien = new Inimigo({
+  seqanim: ["alien_down1", "alien_down0", "alien_down1", "alien_down2"],
+  atlas: "alien.json",
+  points: points,
+  stage: stage
+});
 
-PIXI.loader.add("alien.json").load(function (loader, resources) {
+alien.preload(PIXI.loader);
 
-  var pts = 0;
-  points = new PIXI.Text("" + pts, { fill: "white" });
-  points.x = 10;
-  points.y = 600;
-  stage.addChild(points);
-
-  var frames = []
-  frames.push(PIXI.Texture.fromFrame("alien_down1"));
-  frames.push(PIXI.Texture.fromFrame("alien_down0"));
-  frames.push(PIXI.Texture.fromFrame("alien_down1"));
-  frames.push(PIXI.Texture.fromFrame("alien_down2"));
-  alien = new PIXI.MovieClip(frames);
-  alien.interactive = true;
-  alien.animationSpeed = 0.1;
-  alien.play()
-  alien.on("mousedown", function () {
-    alien.y = -50;
-    alien.x = Math.ceil(Math.random() * 480);
-    pts++;
-    points.text = pts;
-  });
-  stage.addChild(alien);
-
+PIXI.loader.load(function (loader, resources) {  
+  alien.load(loader, resources);
+  points.load();
   anim();
 });
 
 function anim() {
   renderer.render(stage);
-  if (alien.y > 640) {
-    alert("Game over!");
-  } else {
-    alien.y++;
-    requestAnimationFrame(anim);
-  }
-
+  alien.update()
+  requestAnimationFrame(anim);
 }

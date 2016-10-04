@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "browserify index.js -o docs/build.js",
     "dev": "budo index.js -l -o -s build.js"
   },
   "keywords": [

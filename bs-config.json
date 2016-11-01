@@ -1,0 +1,9 @@
+{
+  "port":8080,
+  "server":{
+    "baseDir":"./www"
+  },
+  "watchOptions":{
+    "ignored":"*bower_components/*,*platforms/*"
+  }
+}
